@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="ldtageditor" ng-cloak>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>LDTagEditor</title>
+		<link rel="stylesheet" href="angular-material.min.css" type="stylesheet">
+		<script src="app.js"></script>
+	</head>
+	<body ng-controller="MainController as main">
+		<div layout="column">
+			<md-toolbar>
+				<div class="md-toolbar-tools">
+					<span>LD Tag Editor</span>
+		      		<span flex></span> 
+				</div>
+			</md-toolbar>
+		  	<md-content layout-padding class="tokenEditor" ng-hide="main.dialog">
+  				<md-input-container>
+					<label>UID:</label>
+					<input type="text" ng-model="main.token.uid" readonly>
+				</md-input-container>
+				<md-radio-group ng-model="main.token.character" layout="row">
+					<md-radio-button ng-value="true">Character</md-radio-button>
+					<md-radio-button ng-value="false">Vehicle/Gadget</md-radio-button>
+				</md-radio-group>
+				<md-input-container ng-show="main.token.character === true">
+					<label>ID:</label>
+					<md-select ng-model="main.token.id" placeholder="Select a Name">
+						<md-option ng-value="char.id" ng-repeat="char in main.charmap">{{ char.name }}</md-option>
+					</md-select>
+				</md-input-container>
+				<md-input-container ng-show="main.token.character === false">
+					<label>ID:</label>
+					<md-select ng-model="main.token.id" placeholder="Select a Name">
+						<md-option ng-value="token.id" ng-repeat="token in main.tokenmap">{{ token.name }}</md-option>
+					</md-select>
+				</md-input-container>
+				<md-switch ng-model="main.token.maxUpgrades" ng-show="main.token.character === false">
+					Full Upgrades
+				</md-switch>
+				<md-divider></md-divider>
+				<md-radio-group ng-model="main.tagType" ng-init="main.tagType='ntag213'" layout="row">
+					<md-radio-button value="ntag213">NTAG213</md-radio-button>
+					<md-radio-button value="ntag215">NTAG215</md-radio-button>
+					<md-radio-button value="ntag216">NTAG216</md-radio-button>
+				</md-radio-group>
+				<md-divider></md-divider>
+				<md-button class="md-raised" ng-click="main.readToken(main.token)">Read</md-button>
+				<md-button class="md-raised" ng-click="main.writeToken(main.token)">Write</md-button>
+			</md-content>
+			<md-content class="overlay" ng-show="main.dialog">
+				<h2>Please place phone on token</h2>
+				<md-divider></md-divider>
+				<md-button class="md-raised" align="right" ng-click="main.cancel()">Cancel</md-button>
+  			</md-content>
+			<hr>
+		</div>
+	</body>
+</html>

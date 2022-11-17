@@ -1,0 +1,34 @@
+# Built application files
+build/
+app/.externalNativeBuild/
+
+# Crashlytics configuations
+com_crashlytics_export_strings.xml
+
+# Local configuration file (sdk path, etc)
+local.properties
+keystore.properties
+
+# Gradle generated files
+.gradle/
+
+# Signing files
+.signing/
+
+# Generated
+app/.cxx/
+app/release/
+app/publish/
+
+# User-specific configurations
+.idea/
+*.iml
+
+# OS-specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

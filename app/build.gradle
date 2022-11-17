@@ -1,0 +1,78 @@
+apply plugin: 'com.android.application'
+
+android {
+    signingConfigs {
+        debug {
+            storeFile file('/home/naleo/.keystore')
+            storePassword '19monkeys'
+            keyAlias 'key0'
+            keyPassword '19monkeys'
+        }
+    }
+    compileSdk 31
+
+    defaultConfig {
+        applicationId "com.ld.tageditor"
+        minSdk 20
+        targetSdk 23
+        versionCode 1
+        versionName "1.1"
+
+        vectorDrawables {
+            useSupportLibrary = true
+        }
+
+        def commit = 'git rev-parse --short HEAD'.execute().text.trim()
+        buildConfigField "String", "COMMIT", "\""+commit+"\""
+        project.archivesBaseName = "LDTagEditor-" + commit
+    }
+
+    splits {
+        abi {
+            enable true
+            reset()
+            include "arm64-v8a"
+            universalApk false
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            initWith release
+            debuggable true
+            try {
+                def keystoreProps = new Properties()
+                keystoreProps.load(new FileInputStream(rootProject.file("keystore.properties")))
+                buildTypes.debug.signingConfig signingConfigs.debug
+                debug {
+                    storeFile '/home/naleo/.keystore'
+                    keyAlias 'key0'
+                    keyPassword '19monkeys'
+                    storePassword '19monkeys'
+                }
+            } catch (FileNotFoundException ignored) { }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    lint {
+        abortOnError false
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs[0].outputFileName = project.archivesBaseName + ".apk"
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'androidx.webkit:webkit:1.4.0'
+}
